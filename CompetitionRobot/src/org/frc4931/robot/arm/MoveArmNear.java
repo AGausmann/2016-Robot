@@ -55,6 +55,11 @@ public class MoveArmNear extends org.strongback.command.Command {
 
     @Override
     public boolean execute() {
+        if (arm.isOverCurrent()) {
+            arm.setControlMode(TalonController.ControlMode.SPEED);
+            arm.stop();
+            return true;
+        }
         return Math.abs(arm.getCurrentAngle() - arm.getTargetAngle()) < this.tolerance;
     }
 }

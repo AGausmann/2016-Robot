@@ -52,6 +52,11 @@ public class MoveArmTo extends org.strongback.command.Command {
 
     @Override
     public boolean execute() {
+        if (arm.isOverCurrent()) {
+            arm.setControlMode(TalonController.ControlMode.SPEED);
+            arm.stop();
+            return true;
+        }
         return arm.isAtTarget();
     }
 }

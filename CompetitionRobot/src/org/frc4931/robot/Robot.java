@@ -134,7 +134,7 @@ public class Robot extends IterativeRobot {
 //        armMotor.setReverseSoftLimit(205);
 //        armMotor.setForwardSoftLimit(-120);
 //        armMotor.setReverseSoftLimit(-40);
-        arm = new Arm(armMotor);
+        arm = new Arm(armMotor, 20.0);
         arm.setGains(ARM_DEFAULT_GAINS);
         arm.setSoftLimitsEnabled(false);
 

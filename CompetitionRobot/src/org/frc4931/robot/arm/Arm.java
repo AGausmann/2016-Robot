@@ -38,13 +38,16 @@ public class Arm implements Requirable {
     private final TalonController controller;
     private final AngleSensor angleSensor;
     private final Switch homeSwitch;
+    private final double maxCurrent;
 
     /**
      * Constructs a new Arm subsystem given a Talon SRX motor controller.
      * @param controller The Talon SRX that is responsible for controlling the arm.
+     * @param maxCurrent The maximum current that the motor should use.
      */
-    public Arm(TalonController controller) {
+    public Arm(TalonController controller, double maxCurrent) {
         this.controller = controller;
+        this.maxCurrent = maxCurrent;
         angleSensor = controller.getSelectedSensor();
         //FIXME Strongback assigns reverse limit switch to forward
         homeSwitch = controller.getReverseLimitSwitch();
@@ -61,6 +64,7 @@ public class Arm implements Requirable {
 
     /**
      * Set the control mode for this controller.
+     * TODO See if this can be handled in the background
      *
      * @param mode the control mode; may not be null
      * @return this object so that methods can be chained; never null
@@ -125,5 +129,13 @@ public class Arm implements Requirable {
     public void setSoftLimitsEnabled(boolean enabled) {
         controller.enableForwardSoftLimit(enabled);
         controller.enableReverseSoftLimit(enabled);
+    }
+
+    public double getCurrent() {
+        return controller.getCurrentSensor().getCurrent();
+    }
+
+    public boolean isOverCurrent() {
+        return getCurrent() > maxCurrent;
     }
 }
